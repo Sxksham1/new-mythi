@@ -1,0 +1,1092 @@
+# STQA Practicals – Performance Steps
+
+---
+
+## Practical 1 – Creation of Test Suite Using Selenium IDE
+
+**Steps:**
+
+1. Open Firefox → search "Selenium IDE Firefox Extension" → open selenium.dev/selenium-ide page.
+2. Click **Add to Firefox** → click **Add Extension** → wait for installation.
+3. Click Extensions icon → select **Selenium IDE** to launch it.
+4. On the welcome screen, click **Create a new project**.
+5. Enter Project Name: `WebFormatValidation`, set Base URL: `https://example.com`, click OK.
+6. **Test Case 1 – HTML Page Validation**
+   - Click **+** → Add Test → Name: `HTML_Page_Test`
+   - Start recording, open `https://example.com`, click a couple of links (e.g. "Learn more", "Domains")
+   - Stop recording → Save → Run the test.
+7. **Test Case 2 – XML Response Validation**
+   - Click **+** → Add Test → Name: `XML_Response_Test`
+   - Command = `open`, Target = `https://httpbingo.org/xml`
+   - Start recording → go to IDE → Stop recording → Save → Run the test.
+8. **Test Case 3 – JSON API Validation**
+   - Click **+** → Add Test → Name: `JSON_API_Test`
+   - Command = `open`, Target = `https://reqres.in/api/users?page=2`
+   - Start recording → Stop recording → Save → Run the test → verify JSON data appears.
+9. **Test Case 4 – Dynamic Form Validation**
+   - Click **+** → Add Test → Name: `Dynamic_Form_Test`
+   - Enter commands:
+
+   | Command | Target | Value |
+   |---|---|---|
+   | open | https://www.selenium.dev/selenium/web/web-form.html | |
+   | click | name=my-text | |
+   | click | name=my-text | Selenium IDE |
+   | click | css=button | |
+
+   - Run the test.
+10. **Create Test Suite**
+    - Click **Test Suites** → **New Test Suite** → Name: `WebPageValidationSuite`
+    - Add all 4 tests: `HTML_Page_Test`, `XML_Response_Test`, `JSON_API_Test`, `Dynamic_Form_Test`
+11. **Execute Test Suite**
+    - Select the suite → click **Run Current Test Suite** → all tests should pass.
+12. **Export Script in WebDriver Format**
+    - Click Project Suite → **Export** → choose Java JUnit WebDriver / Python WebDriver / JavaScript WebDriver → Save the file.
+
+**Sample Exported Code (Java JUnit WebDriver):**
+
+```java
+import org.junit.Test;
+import org.junit.Before;
+import org.junit.After;
+import static org.junit.Assert.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import java.util.*;
+
+public class WebPageValidationSuiteTest {
+    private WebDriver driver;
+    private Map<String, Object> vars;
+
+    @Before
+    public void setUp() {
+        driver = new FirefoxDriver();
+        vars = new HashMap<String, Object>();
+    }
+
+    @After
+    public void tearDown() {
+        driver.quit();
+    }
+
+    @Test
+    public void hTMLPageTest() {
+        driver.get("https://example.com");
+        driver.findElement(By.linkText("Learn more")).click();
+        driver.findElement(By.linkText("Domains")).click();
+    }
+
+    @Test
+    public void xMLResponseTest() {
+        driver.get("https://httpbingo.org/xml");
+    }
+
+    @Test
+    public void jSONAPITest() {
+        driver.get("https://reqres.in/api/users?page=2");
+    }
+
+    @Test
+    public void dynamicFormTest() {
+        driver.get("https://www.selenium.dev/selenium/web/web-form.html");
+        driver.findElement(By.name("my-text")).click();
+        driver.findElement(By.name("my-text")).click();
+        driver.findElement(By.cssSelector("button")).click();
+    }
+}
+```
+
+---
+
+## Practical 2 – Cross-Website Functional Testing Using Selenium IDE
+
+**Steps:**
+
+1. Open Firefox → Add-ons store → search "Selenium IDE" → **Add to Firefox** → **Add** → install.
+2. Click Extensions icon → select Selenium IDE.
+3. Click **Create a New Project** → Name: `Cross Website Functional Testing` → click OK.
+4. **Test Case 1 (Wikipedia)**
+   - Click **Add New Test** → Name: `Wikipedia_Test`
+   - Set Base URL: `https://www.wikipedia.org`
+   - Click **Record a New Test**
+   - Open Wikipedia → click Search box → type `Software Testing`
+   - Click Search button → verify page heading contains "Software testing"
+   - Click **Stop Recording**
+   - Replace the `type` command (target=searchInput) with:
+     - Command = `execute script`, Target = `document.getElementById('searchInput')`, Value = `Software testing`
+   - Save.
+5. **Test Case 2 (The Internet Heroku App)**
+   - Click **Add New Test** → Name: `Dropdown_Test`
+   - Set Base URL: `https://the-internet.herokuapp.com`
+   - Click **Record a New Test**
+   - Click Dropdown link → select Option 1 → select Option 2 → return to Home page
+   - Click **Checkboxes** → select the first checkbox
+   - Click **Stop Recording** → Run the test.
+6. **Create Test Suite**
+   - Click **Create a New Test Suite** → Name: `Functional_Test_Suite`
+   - Add `Wikipedia_Test` and `Dropdown_Test` to the suite.
+7. **Execute the Test Suite**
+   - Click **Run All Tests** → observe green (Pass) / red (Fail) status → wait for completion.
+8. **Analyze Execution Logs**
+   - Check commands executed, target elements, input values, pass/fail status, execution time, error messages.
+
+---
+
+## Practical 3 – Manual Test Case Design and Execution
+
+**Steps:**
+
+1. Open browser → navigate to `https://practicetestautomation.com/practice-test-login/`
+2. Study the page: Username field, Password field, Submit button, Error message, Success page.
+3. Open Microsoft Excel / Google Sheets → create workbook.
+4. **Sheet 1: Test Plan** — create table:
+
+   | Test Plan Item | Description |
+   |---|---|
+   | Project Name | Login Page Testing |
+   | Application | Practice Test Automation |
+   | Module | Login |
+   | Objective | Verify Login Functionality |
+   | Scope | Username, Password and Login Button |
+   | Testing Type | Manual Functional Testing |
+   | Environment | Windows 10/11, Chrome Browser |
+   | Tester | Student Name |
+   | Date | Current Date |
+
+5. **Sheet 2: Test Scenarios** — create table:
+
+   | Scenario ID | Test Scenario |
+   |---|---|
+   | TS01 | Verify successful login |
+   | TS02 | Verify invalid username |
+   | TS03 | Verify invalid password |
+   | TS04 | Verify blank username |
+   | TS05 | Verify blank password |
+   | TS06 | Verify both fields blank |
+
+6. **Sheet 3: Test Cases** — columns: TC ID, Scenario, Steps, Test Data, Expected Result. Create 6 test cases (TC01–TC06) as per scenarios above (valid login, invalid username, invalid password, blank username, blank password, both blank).
+7. **Execute Test Cases**
+   - Run each test manually on the website.
+   - Compare Actual Result with Expected Result.
+   - Record observations (Actual Result, Defect ID columns).
+8. **Sheet 4: Execution Report** — columns: TC ID, Expected Result, Actual Result, Status, Remarks. Fill in Pass/Fail status for each TC.
+9. **Sheet 5: Defect Report** — columns: Defect ID, Module, Description, Severity, Priority, Status. Log defects found (e.g. BUG01 – blank username accepted).
+10. Save the workbook as `Practical3_Manual_Testing_StudentName.xlsx`.
+
+---
+
+## Practical 4 – Login Automation and Validation using Selenium WebDriver (Java) with GitHub Codespaces
+
+**Steps:**
+
+1. Open browser → go to `https://github.com` → sign in.
+2. Open repository: `https://github.com/conceicaodsouza/STQA-Practicals`
+3. Click **Code** → **Codespaces** tab → **Create Codespace on main** → wait for VS Code to load.
+4. Observe project structure (`src/test/java/practical/LoginTest.java`, `pom.xml`, `README.md`).
+   - If `pom.xml` is misplaced, in terminal run:
+     ```
+     find .. -name pom.xml
+     mv src/test/java/practical/pom.xml .
+     ls
+     ```
+5. Open `LoginTest.java`.
+6. Verify/add imports:
+   ```java
+   package practical;
+   import org.openqa.selenium.By;
+   import org.openqa.selenium.WebDriver;
+   import org.openqa.selenium.WebElement;
+   import org.openqa.selenium.chrome.ChromeDriver;
+   ```
+7. In `pom.xml`, remove the first line and save.
+8. In the java file, replace `chromium` with `google-chrome` in the binary path command:
+   ```java
+   options.setBinary("/usr/bin/google-chrome");
+   ```
+9. Open terminal, run setup commands:
+   ```
+   sudo apt-get update
+   sudo apt-get install -y libxkbcommon0 libasound2t64 libgbm1 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libatspi2.0-0
+   ldd /home/codespace/.cache/selenium/chrome/linux64/151.0.7922.47/chrome | grep "not found"
+   ```
+   (no output expected if all libraries installed)
+10. Test chrome:
+    ```
+    /home/codespace/.cache/selenium/chrome/linux64/151.0.7922.47/chrome --headless --no-sandbox --disable-dev-shm-usage --disable-gpu --disable-software-rasterizer --disable-extensions --window-size=1920,1080 --dump-dom https://example.com
+    ```
+11. Run the test:
+    ```
+    mvn test
+    ```
+    or
+    ```
+    mvn clean test
+    ```
+12. Verify console output: URL Validation Passed, Welcome Message Validation Passed, Logout Button Visible, BUILD SUCCESS.
+
+**Java Code (full, paste into LoginTest.java):**
+
+```java
+package practical;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class LoginTest {
+
+    @Test
+    public void loginTest() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--disable-software-rasterizer");
+        options.addArguments("--disable-extensions");
+        options.addArguments("--window-size=1920,1080");
+        options.setBinary("/usr/bin/google-chrome");
+
+        WebDriver driver = new ChromeDriver(options);
+        System.out.println("Browser launched successfully");
+
+        driver.get("https://the-internet.herokuapp.com/login");
+        System.out.println("Login page opened");
+
+        driver.findElement(By.id("username")).sendKeys("tomsmith");
+        System.out.println("Username entered");
+
+        driver.findElement(By.id("password")).sendKeys("SuperSecretPassword!");
+        System.out.println("Password entered");
+
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+        System.out.println("Login button clicked");
+
+        String actualURL = driver.getCurrentUrl();
+        assertEquals("https://the-internet.herokuapp.com/secure", actualURL);
+        System.out.println("URL Validation Passed");
+
+        String message = driver.findElement(By.id("flash")).getText();
+        assertTrue(message.contains("You logged into a secure area!"));
+        System.out.println("Welcome Message Validation Passed");
+
+        WebElement logout = driver.findElement(By.cssSelector(".button.secondary.radius"));
+        assertTrue(logout.isDisplayed());
+        System.out.println("Logout Button Visibility Validation Passed");
+
+        driver.quit();
+        System.out.println("Browser closed");
+    }
+}
+```
+
+---
+
+## Practical 5 – WebElement Interaction Using Selenium WebDriver
+
+**Steps:**
+
+1. Sign in to GitHub → open repository: `https://github.com/Conceicaodsouza/STQA-WebElement-Practical`
+2. Click **Code** → **Codespaces** → **Create codespace on main** → wait for load.
+3. Verify project structure: `pom.xml`, `src/test/java/practical/BrowserTest.java`, `src/test/resources/web-elements.html`.
+4. Open `BrowserTest.java` and review its logic (open HTML page, locate text box, enter/verify text, locate dropdown, select/verify option, close browser).
+5. Open **Terminal** → run:
+   ```
+   sudo apt-get update
+   sudo apt-get install -y maven chromium chromium-driver
+   ```
+6. Verify installations:
+   ```
+   mvn -version
+   chromium --version
+   chromedriver --version
+   ```
+7. Run the test:
+   ```
+   mvn test
+   ```
+8. Verify output: `Tests run: 1, Failures: 0, Errors: 0, Skipped: 0` and `BUILD SUCCESS`.
+
+**Java Code (full, paste into BrowserTest.java):**
+
+```java
+package practical;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.Select;
+
+public class BrowserTest {
+
+    @Test
+    public void browserTest() {
+        WebDriver driver = null;
+        try {
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--window-size=1920,1080");
+            options.setBinary("/usr/bin/chromium");
+
+            driver = new ChromeDriver(options);
+
+            String filePath = System.getProperty("user.dir") + "/src/test/resources/web-elements.html";
+            driver.get("file://" + filePath);
+
+            assertEquals("Web Element Interaction Practical", driver.getTitle());
+
+            WebElement nameInput = driver.findElement(By.id("name"));
+            nameInput.sendKeys("Conceicao");
+            assertEquals("Conceicao", nameInput.getAttribute("value"));
+
+            WebElement countryDropdown = driver.findElement(By.id("country"));
+            Select countrySelect = new Select(countryDropdown);
+            countrySelect.selectByVisibleText("India");
+            assertEquals("India", countrySelect.getFirstSelectedOption().getText());
+
+        } finally {
+            if (driver != null) {
+                driver.quit();
+            }
+        }
+    }
+}
+```
+
+---
+
+## Practical 6 – Data-Driven Testing using Selenium WebDriver and Apache POI
+
+**Steps:**
+
+1. Open repository: `https://github.com/conceicaodsouza/STQA-Practical-6-DataDrivenTesting`
+2. Click **Code** → **Codespaces** → **Create codespace on main** → wait for load.
+3. Open Terminal, verify tools one by one:
+   ```
+   java -version
+   mvn -version
+   ```
+   If Maven missing:
+   ```
+   sudo apt-get update
+   sudo apt-get install -y maven
+   ```
+4. Verify Git LFS:
+   ```
+   git lfs version
+   ```
+   If missing:
+   ```
+   sudo apt-get install -y git-lfs
+   git lfs install
+   ```
+5. Verify Chromium:
+   ```
+   which chromium
+   ```
+   If missing:
+   ```
+   sudo apt-get update
+   sudo apt-get install -y chromium chromium-driver
+   ```
+6. Verify Chromium and ChromeDriver versions:
+   ```
+   chromium --version
+   which chromedriver
+   chromedriver --version
+   ```
+7. Open the web application folder:
+   ```
+   cd webapp
+   ```
+8. Start the local web server:
+   ```
+   python3 -m http.server 8000
+   ```
+   (leave this terminal running)
+9. Open a **New Terminal** (Terminal → New Terminal).
+10. In the new terminal, go back to project root:
+    ```
+    cd ..
+    pwd
+    ```
+11. Run the Selenium test:
+    ```
+    mvn test
+    ```
+12. Verify output: "Browser launched successfully", "Student Management System opened successfully", BUILD SUCCESS.
+13. Stop the Python server in the first terminal: press `Ctrl + C`.
+
+---
+
+## Practical 7 – Data Extraction and Score Analysis from Web Table
+
+**Steps:**
+
+1. Open repository: `https://github.com/Conceicaodsouza/STQA-Practical-7-DataExtraction`
+2. Sign in to GitHub if required → Click **Code** → **Codespaces** → **Create codespace on main**.
+3. Open Terminal → New Terminal.
+4. Verify project files:
+   ```
+   pwd
+   ls
+   ```
+   (should show `pom.xml`, `students.html`, `src/`)
+5. Check Java and Maven:
+   ```
+   java -version
+   mvn -version
+   ```
+   If missing:
+   ```
+   sudo apt-get update
+   sudo apt-get install -y openjdk-21-jdk maven
+   ```
+6. Check Chromium/Chrome:
+   ```
+   which chromium
+   which chromium-browser
+   which google-chrome
+   which chromedriver
+   ```
+   If missing, install an available Chromium/Chrome package as per Codespace setup.
+7. **Start the local web server first (Terminal 1):**
+   ```
+   python3 -m http.server 8000
+   ```
+   Confirm: `Serving HTTP on 0.0.0.0 port 8000 ...` — keep this terminal open, do not press Ctrl+C.
+8. Open a **second terminal** (Terminal → New Terminal):
+   ```
+   pwd
+   ```
+9. Run the test:
+   ```
+   mvn test
+   ```
+10. Verify output:
+    ```
+    ANALYSIS RESULT
+    Total Students: 10
+    Students scoring above 60 in at least one subject: 6
+    Percentage: 60.0%
+    Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+    BUILD SUCCESS
+    ```
+11. If `ERR_CONNECTION_REFUSED` occurs, go back to Terminal 1, start the server again with `python3 -m http.server 8000`, then rerun `mvn test` in Terminal 2.
+
+**Core Selenium Logic (from StudentScoreTest):**
+
+```java
+driver.get("http://localhost:8000/students.html");
+
+WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+wait.until(
+    ExpectedConditions.numberOfElementsToBeMoreThan(
+        By.cssSelector("#studentTable tbody tr"), 0
+    )
+);
+
+List<WebElement> rows = driver.findElements(By.cssSelector("#studentTable tbody tr"));
+int totalStudents = rows.size();
+int qualifyingStudents = 0;
+
+for (WebElement row : rows) {
+    List<WebElement> cells = row.findElements(By.tagName("td"));
+    int english = Integer.parseInt(cells.get(2).getText());
+    int mathematics = Integer.parseInt(cells.get(3).getText());
+    int science = Integer.parseInt(cells.get(4).getText());
+
+    boolean above60 = english > 60 || mathematics > 60 || science > 60;
+
+    if (above60) {
+        qualifyingStudents++;
+    }
+}
+
+double percentage = (qualifyingStudents / (double) totalStudents) * 100;
+```
+
+---
+
+## Practical 8 – Object Identification and Counting on a Web Page
+
+**Steps:**
+
+1. Log in to GitHub → open repository: `https://github.com/Conceicaodsouza/STQA-Practical-8-ObjectCounting`
+2. Click **Code** → **Codespaces** → **Create codespace on main** → wait for load.
+3. In terminal, check project files:
+   ```
+   ls
+   ```
+   (should show `README.md`, `pom.xml`, `src`, `students.html`)
+4. Check Java:
+   ```
+   java -version
+   ```
+5. Check Maven:
+   ```
+   mvn -version
+   ```
+   If missing:
+   ```
+   sudo apt-get update
+   sudo apt-get install -y maven
+   ```
+6. Check Chromium:
+   ```
+   which chromium
+   chromium --version
+   ```
+   If missing:
+   ```
+   sudo apt-get update
+   sudo apt-get install -y chromium chromium-driver
+   ```
+7. Check ChromeDriver:
+   ```
+   which chromedriver
+   chromedriver --version
+   ```
+8. Open `students.html` in Explorer → right-click → **Open with Live Server**.
+9. Manually observe and count Links, Images, Buttons, Input Fields on the page; record in a table.
+10. Open `src/test/java/practical/ObjectCountingTest.java` and review logic.
+11. In terminal, ensure you're in the project folder, run:
+    ```
+    mvn clean test
+    ```
+12. Verify output:
+    ```
+    WEB PAGE OBJECT ANALYSIS
+    Total Links / Images / Buttons / Input Fields / Total Objects
+    BUILD SUCCESS
+    ```
+13. Compare manual count vs Selenium count in a table — they should match.
+
+**Core Selenium Logic (ObjectCountingTest):**
+
+```java
+int linkCount = driver.findElements(By.tagName("a")).size();
+int imageCount = driver.findElements(By.tagName("img")).size();
+int buttonCount = driver.findElements(By.tagName("button")).size();
+int inputCount = driver.findElements(By.tagName("input")).size();
+
+int totalObjects = linkCount + imageCount + buttonCount + inputCount;
+```
+
+---
+
+## Practical 9 – List and Combo Box Item Verification
+
+**Steps:**
+
+1. Log in to GitHub → open repository: `https://github.com/consy16/STQA-Practical-9-List-ComboBox-New`
+2. Click **Code** → **Codespaces** → **Create codespace on new** → wait for load.
+3. Open Terminal, check Java:
+   ```
+   java -version
+   ```
+4. Check Maven:
+   ```
+   mvn -version
+   ```
+5. Check project files:
+   ```
+   find src -type f
+   ```
+   (should list `list-combobox.html` and `ListComboBoxTest.java`)
+6. Check Chrome:
+   ```
+   google-chrome --version
+   ```
+7. Check ChromeDriver:
+   ```
+   chromedriver --version
+   ```
+8. Start the local web server:
+   ```
+   jwebserver -p 8000 -d /workspaces/STQA-Practical-9-List-ComboBox-New/src/test/resources
+   ```
+   (keep this terminal running)
+9. Forward port 8000: open **PORTS** tab → **Forward a port** → enter `8000` → press Enter → open the forwarded port in browser (verify page displays).
+10. Open a **new terminal** (keep the server terminal running).
+11. Confirm you are in project folder: `/workspaces/STQA-Practical-9-List-ComboBox-New`
+12. Run the test:
+    ```
+    mvn test
+    ```
+13. Verify `BUILD SUCCESS` in output.
+
+---
+
+## Practical 10 – Load Testing Using Apache JMeter
+
+**Steps:**
+
+1. **Install Java:** Download Temurin 21 (Windows x64 JDK MSI) from `https://adoptium.net/temurin/releases/?version=21` → run the `.msi` installer.
+2. Verify:
+   ```
+   java -version
+   javac -version
+   ```
+3. **Download Apache JMeter:** go to Apache JMeter official download page → download the Binary ZIP (`apache-jmeter-5.6.3.zip`).
+4. Extract the ZIP to `C:\JMeter`.
+5. Open `bin` folder inside extracted JMeter → double-click `jmeter.bat` → wait for JMeter GUI to open.
+6. **Create a folder for the practical:**
+   ```
+   mkdir C:\STQA-JMeter
+   cd C:\STQA-JMeter
+   ```
+7. **Create the web page:** open Notepad → paste the HTML below → Save As `index.html` (Save as type: All Files) inside `C:\STQA-JMeter`.
+
+   ```html
+   <!DOCTYPE html>
+   <html>
+   <head>
+   <title>STQA Load Testing</title>
+   </head>
+   <body>
+   <h1>STQA Load Testing Application</h1>
+   <p>This page is used for Apache JMeter load testing.</p>
+   <button>Submit</button>
+   </body>
+   </html>
+   ```
+
+8. **Start the local web server:**
+   ```
+   cd C:\STQA-JMeter
+   java -m jdk.httpserver
+   ```
+   Confirm: `Binding to loopback address 127.0.0.1, port 8000`
+9. Test in browser: open `http://localhost:8000` and confirm the page displays. Keep the Command Prompt open.
+10. **Create JMeter Test Plan:**
+    - In JMeter, right-click **Test Plan** → **Add → Threads (Users) → Thread Group**
+11. **Configure Thread Group – Scenario 1:**
+    - Number of Threads (users): `10`
+    - Ramp-up period (seconds): `10`
+    - Loop Count: `5`
+12. **Add HTTP Request:**
+    - Right-click Thread Group → **Add → Sampler → HTTP Request**
+    - Name: `Open STQA Web Page`, Protocol: `http`, Server Name or IP: `localhost`, Port: `8000`, Method: `GET`, Path: `/`
+13. **Add Listeners** (right-click Thread Group → Add → Listener):
+    - View Results Tree
+    - Summary Report
+    - Graph Results
+14. **Save Test Plan:** File → Save Test Plan As → `STQA_Load_Test.jmx` inside `C:\STQA-JMeter`.
+15. **Execute Scenario 1:**
+    - Run → Clear All → click Summary Report → click green **Start** button → wait for completion.
+    - Check Summary Report: Samples = 50, Error % = 0.00%.
+    - Record: Samples, Average/Min/Max Response Time, Error %, Throughput.
+    - Open View Results Tree to verify requests are successful.
+    - Open Graph Results to view the response-time graph.
+16. **Execute Scenario 2 – Higher Load:**
+    - Change Thread Group: Number of Threads = `50`, Ramp-up = `20`, Loop Count = `10`.
+    - Run → Clear All → Summary Report → click **Start** → wait for completion.
+    - Record the same parameters as Scenario 1.
+    - Open Graph Results and observe.
+17. Compare Scenario 1 vs Scenario 2 results in a table (Users, Loop Count, Total Requests, Avg/Max Response Time, Throughput, Error %).
+
+---
+
+## Practical 11 – Bug Tracking and Defect Lifecycle Management using JIRA
+
+**Steps:**
+
+1. Create Atlassian account at `https://id.atlassian.com/signup` → verify email → set password.
+2. Open `https://www.atlassian.com/software/jira/free` → select **Jira Product Discovery** → follow prompts to set up a Jira project for free.
+3. In left navigation: **Spaces → Create space** → choose **Kanban template**.
+4. Enter space name: `STQA Defect Tracking`; set key as `STQA` if allowed.
+5. Under **Work types**, confirm **Bug** is included. Under **Statuses**, keep defaults (To Do, In Progress, Done).
+6. **Create Defect01:**
+   - Click **Create (+)** → select `STQA / STQA Defect Tracking`, Work type = **Bug**.
+   - Title: `Defect01 - Login fails with valid credentials`
+   - Description:
+     ```
+     Steps to Reproduce:
+     1. Open the application login page.
+     2. Enter a registered username.
+     3. Enter the correct password.
+     4. Click the Login button.
+
+     Expected Result: The user should log in successfully and see the home page.
+     Actual Result: The application displays an error message and does not allow the user to log in.
+     Severity: Critical
+     ```
+   - Set Priority = **Highest** (from form, or after creation via details panel).
+   - Click **Create**, note the generated Jira key.
+7. **Create Defect02:**
+   - Title: `Defect02 - Password displayed as plain text`
+   - Priority: **High**
+   - Description:
+     ```
+     Steps to Reproduce:
+     1. Open the application login page.
+     2. Enter a username.
+     3. Type a password into the password field.
+
+     Expected Result: The password should be masked with dots or asterisks.
+     Actual Result: The password is displayed as readable text.
+     Severity: Major
+     ```
+   - Leave status in **To Do**.
+8. **Create Defect03:**
+   - Title: `Defect03 - Login button is misaligned`
+   - Priority: **Low**
+   - Description:
+     ```
+     Steps to Reproduce:
+     1. Open the application login page.
+     2. Observe the position of the Login button.
+
+     Expected Result: The Login button should be properly aligned with the username and password fields.
+     Actual Result: The Login button is slightly misaligned.
+     Severity: Minor
+     ```
+9. **Demonstrate Defect Lifecycle (use Defect01):**
+   - Open Defect01 → confirm Priority = Highest, Status = To Do.
+   - Change status to **In Progress** (use "Start progress" transition).
+   - Add comment: `Fix implemented. Retested the defect and works fine now.` → Submit.
+   - Change status from **In Progress** to **Done**.
+10. **Generate Defect Summary:**
+    - Open `STQA Defect Tracking` space → select **List / All work**.
+    - Click **Filter** → set Work type = **Bug**.
+    - Open Saved filters / filter dropdown → **Save filter** (or **Copy filter**) → name it `STQA Defect Summary Report`.
+    - Open **Columns** → display: Key, Summary, Status, Priority.
+    - Verify all 3 bugs are visible; record each Jira key.
+11. **Capture evidence screenshots:**
+    - List/All work view with all 3 defects and columns (Key, Summary, Status, Priority).
+    - Defect01 details (title, description/severity, Priority = Highest, Status = Done).
+    - Defect01 Activity/Comments showing the fix/retest comment.
+    - Saved/copied filter named `STQA Defect Summary Report`.
+
+---
+
+## Practical 12 – Checkbox Identification and Validation
+
+**Aim:** Identify checkboxes on a web page, count checked/unchecked checkboxes, perform dynamic selection/deselection, and validate checkbox states using Selenium WebDriver.
+
+**Steps:**
+
+1. **Open the repository**
+   - Open: `https://github.com/Conceicaodsouza/STQA-Practical-12-CheckboxValidation`
+   - Click **Code** → **Codespace** → **Create codespace on main** → wait for the Codespace to load.
+
+2. **Check Java** (open the Codespace terminal)
+   ```
+   java -version
+   ```
+   Confirm Java version info is displayed.
+
+3. **Check Maven**
+   ```
+   mvn -version
+   ```
+   Confirm Maven version info is displayed.
+
+4. **Start the local web server** (Terminal 1 — do NOT close this terminal)
+   ```
+   jwebserver -p 8000 -d /workspaces/STQA-Practical-12-CheckboxValidation/src/test/resources
+   ```
+   Confirm the server is shown running on port 8000.
+
+5. **Forward port 8000**
+   - Open the **PORTS** tab in Codespaces.
+   - Click **Forward a Port** → enter `8000` → press Enter.
+   - Open the forwarded port's URL in the browser → the checkbox web page should appear.
+
+6. **Observe the web page**
+   - The page shows 6 checkboxes. Note down which are checked and which are unchecked:
+
+     | # | Subject | State |
+     |---|---|---|
+     | 1 | Java | Checked |
+     | 2 | Python | Unchecked |
+     | 3 | Software Testing | Checked |
+     | 4 | Database Management | Unchecked |
+     | 5 | Web Development | Unchecked |
+     | 6 | Computer Networks | Unchecked |
+
+     **Total checkboxes = 6, Checked = 2, Unchecked = 4**
+
+7. **Check Chrome and install required dependencies, if needed**
+   - First check whether Chrome is already installed:
+     ```
+     google-chrome --version
+     ```
+   - If this shows a version, Chrome is available — skip to Step 8.
+   - If not found, check whether Selenium has already downloaded Chrome on its own:
+     ```
+     ls ~/.cache/selenium/chrome/linux64/
+     ```
+   - Then install the required Chrome libraries:
+     ```
+     sudo apt update
+     sudo apt install -y fonts-liberation libasound2t64 libatk-bridge2.0-0 libatk1.0-0 libatspi2.0-0 libcups2 libgbm1 libgtk-3-0 libvulkan1 libxcomposite1 libxdamage1 libxfixes3 libxkbcommon0 libxrandr2 xdg-utils
+     ```
+   - Wait until the installation finishes.
+
+8. **Open a new terminal** (keep the Step 4 `jwebserver` terminal running in the background)
+   - Terminal → New Terminal
+   - Navigate to the project folder (if not already there):
+     ```
+     cd /workspaces/STQA-Practical-12-CheckboxValidation
+     ```
+
+9. **Run the Selenium test**
+   ```
+   mvn test
+   ```
+   The test will:
+   - Identify all 6 checkboxes and count checked/unchecked ones.
+   - Select the Python checkbox.
+   - Deselect the Java checkbox.
+   - Recalculate the counts and validate everything using assertions.
+
+10. **Verify the output** — the terminal should show:
+    ```
+    ========================================
+    CHECKBOX IDENTIFICATION AND VALIDATION
+    ========================================
+    Total checkboxes   : 6
+    Checked checkboxes : 2
+    Unchecked checkboxes: 4
+    Python checkbox selected: true
+    Java checkbox selected after deselection: false
+    ----------------------------------------
+    FINAL CHECKBOX STATUS
+    Checked checkboxes : 2
+    Unchecked checkboxes: 4
+    ----------------------------------------
+    All checkbox validations passed.
+    [INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+    [INFO] BUILD SUCCESS
+    ```
+
+11. **Result:** The checkbox identification and validation was successfully performed using Selenium WebDriver.
+
+---
+
+## Practical 13 – Dynamic Web Table Handling and Sorting Validation
+
+**Steps:**
+
+1. Open repository: `https://github.com/Conceicaodsouza/STQA-Practical-13-DynamicWebTable`
+2. Click **Code** → **Codespaces** → **Create codespace on new**.
+3. Check Java and Maven:
+   ```
+   java -version
+   mvn -version
+   ```
+4. Check Chrome (downloaded by Selenium):
+   ```
+   find ~/.cache/selenium/chrome -type f -name chrome 2>/dev/null
+   ```
+   If not found, run `mvn test` once — Selenium Manager auto-downloads Chrome.
+5. If `SessionNotCreatedException` occurs, check missing libraries:
+   ```
+   ldd ~/.cache/selenium/chrome/linux64/<version>/chrome | grep "not found"
+   ```
+6. Install required libraries:
+   ```
+   sudo apt-get update && sudo apt-get install -y libatk1.0-0t64 libatk-bridge2.0-0t64 libcups2t64 libxkbcommon0 libasound2t64 libgbm1 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libatspi2.0-0
+   ```
+7. Verify Chrome directly:
+   ```
+   ~/.cache/selenium/chrome/linux64/<version>/chrome --headless=new --no-sandbox --disable-dev-shm-usage --disable-gpu --version
+   ```
+8. Re-check dependencies:
+   ```
+   ldd ~/.cache/selenium/chrome/linux64/<version>/chrome | grep "not found"
+   ```
+   (no output = all good)
+9. **Start the web server:**
+   ```
+   jwebserver -b 0.0.0.0 -p 8000 -d src/test/resources
+   ```
+   (keep running)
+10. Forward port 8000 (PORTS tab → Forward a Port → `8000`) → open the forwarded URL → view the Dynamic Web Table page.
+11. Manually try: view table, click **Sort by Marks**, click again to reverse sort, select **Pass** from filter.
+12. Open a **new terminal** (server keeps running), run:
+    ```
+    mvn test
+    ```
+13. Verify output:
+    ```
+    DYNAMIC WEB TABLE DATA
+    Total rows: 10
+    Ascending marks: [...]
+    Descending marks: [...]
+    FILTERED RESULTS - PASS
+    Filtered rows: 6
+    ALL VALIDATIONS PASSED
+    BUILD SUCCESS
+    ```
+
+---
+
+## Practical 14 – File Upload and Download Automation
+
+**Steps:**
+
+1. Sign in to GitHub → open repository: `https://github.com/Conceicaodsouza/STQA-Practical-14-FileUploadDownload`
+2. Open in GitHub Codespaces → wait for load → open terminal.
+3. Verify directory:
+   ```
+   pwd
+   ```
+4. Check Java:
+   ```
+   java -version
+   javac -version
+   ```
+   If missing:
+   ```
+   sudo apt-get update
+   sudo apt-get install -y openjdk-21-jdk
+   ```
+5. Check Maven:
+   ```
+   mvn -version
+   ```
+   If missing:
+   ```
+   sudo apt-get update
+   sudo apt-get install -y maven
+   ```
+6. Check Chrome/ChromeDriver:
+   ```
+   which google-chrome
+   which chromium
+   which chromedriver
+   ls -d ~/.cache/selenium/chrome/linux64/* 2>/dev/null
+   ls -d ~/.cache/selenium/chromedriver/linux64/* 2>/dev/null
+   ```
+7. Check Ubuntu version:
+   ```
+   cat /etc/os-release | head
+   ```
+8. Check/install Chrome dependencies:
+   ```
+   ldconfig -p | grep -E 'libatk-1.0.so.0|libatk-bridge2.0.so.0|libcups.so.2|libxkbcommon.so.0|libasound.so.2|libgbm.so.1|libXcomposite.so.1|libXdamage.so.1|libXfixes.so.3|libXrandr.so.2|libatspi.so.0'
+   ```
+   If missing:
+   ```
+   sudo apt-get update && sudo apt-get install -y libatk1.0-0 libatk-bridge2.0-0 libcups2 libxkbcommon0 libasound2t64 libgbm1 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libatspi2.0-0
+   ```
+9. Verify Python3:
+   ```
+   python3 --version
+   ```
+10. Check practical files:
+    ```
+    ls
+    ls pom.xml
+    ls src/test/java/practical/FileUploadDownloadTest.java
+    ls src/test/resources/file-upload-download.html
+    ls src/test/resources/upload-files/sample-upload.txt
+    ls src/test/resources/download-files/sample-download.txt
+    ```
+11. **Start the local web server (Terminal 1):**
+    ```
+    python3 -m http.server 8000 --directory src/test/resources
+    ```
+    (keep running)
+12. Open **second terminal**, verify server:
+    ```
+    curl -I http://127.0.0.1:8000/file-upload-download.html
+    curl -I http://127.0.0.1:8000/download-files/sample-download.txt
+    ```
+13. View the webpage in browser: Ports tab → forward port 8000 → open forwarded URL.
+14. In the second terminal, run the test:
+    ```
+    mvn test
+    ```
+15. Verify output:
+    ```
+    PASS: File upload validation successful
+    PASS: Downloaded file exists and content is verified
+    Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+    BUILD SUCCESS
+    ```
+16. Verify downloaded file:
+    ```
+    ls -l target/downloads/
+    cat target/downloads/sample-download.txt
+    ```
+17. Stop the web server: return to Terminal 1, press `Ctrl + C`.
+
+---
+
+## Practical 15 – TestNG Framework Implementation and Reporting
+
+**Steps:**
+
+1. Open repository: `https://github.com/Conceicaodsouza/STQA-Practical-15-TestNG-Framework`
+2. Click **Code → Codespaces → Create codespace on new**.
+3. Verify project folder:
+   ```
+   pwd
+   ls
+   ```
+   (should show `pom.xml`, `README.md`, `src`, `testng.xml`)
+4. Check Java:
+   ```
+   java -version
+   ```
+5. Check Maven:
+   ```
+   mvn -version
+   ```
+6. Check Chrome/ChromeDriver:
+   ```
+   which google-chrome
+   which chromium
+   which chromium-browser
+   which chromedriver
+   ls -la ~/.cache/selenium/
+   ```
+7. Install Chrome's required system dependencies:
+   ```
+   sudo apt-get update && sudo apt-get install -y libatk1.0-0 libatk-bridge2.0-0 libcups2 libxkbcommon0 libasound2t64 libgbm1 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libatspi2.0-0
+   ```
+8. **Start the login webpage server (Terminal 1):**
+   ```
+   cd /workspaces/STQA-Practical-15-TestNG-Framework && python3 -m http.server 8000 --directory src/test/resources
+   ```
+   (keep running)
+9. In **Terminal 2**, run the test:
+   ```
+   cd /workspaces/STQA-Practical-15-TestNG-Framework
+   mvn clean test
+   ```
+10. **Start the TestNG report server (Terminal 3):**
+    ```
+    cd /workspaces/STQA-Practical-15-TestNG-Framework && python3 -m http.server 8001 --directory target/surefire-reports
+    ```
+    (keep running)
+11. Open the login page: PORTS tab → forward port 8000 → open the port URL.
+    - Test credentials: Username = `student`, Password = `test123`
+    - Verify success message for correct credentials and error message for incorrect credentials.
+12. Open the TestNG report: PORTS tab → forward port 8001 → open the port URL → add `/index.html` if needed.
+    - Refresh after Maven completes if opened early.
+13. Verify XML test results in terminal:
+    ```
+    grep -E 'verifyPageTitle|verifyUsernameField|verifyPasswordField|verifySuccessfulLogin|verifyInvalidLogin' target/surefire-reports/testng-results.xml
+    grep -E '<suite|<test |<test-method|total=|passed=|failed=|skipped=' target/surefire-reports/testng-results.xml
+    ```
+14. Confirm all five test methods show `status="PASS"` with no failures/errors, and `BUILD SUCCESS` in Maven output.
+
+---
+
